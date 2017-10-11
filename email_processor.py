@@ -1,4 +1,11 @@
-import numpy as np
+#! /usr/bin/env python
+#
+# email_processor.py
+#
+# Created by Kacper Rączy on 11.10.2017.
+# Copyright (c) 2017 Kacper Rączy. All rights reserved.
+#
+
 import re
 from stemming.porter2 import stem
 
@@ -38,6 +45,18 @@ class EmailProcessor(object):
             #TODO print result email
 
         return word_indexes
+
+    def email_features(self, indexes):
+        """
+        Produces email feature vector from word indexes
+        :param indexes: indexes of words in email
+        :return: email feature vector
+        """
+        n = len(self.word_arr)
+        feature_vec = n * [0]
+        for i in indexes:
+            feature_vec[i] = 1
+        return feature_vec
 
 
     def replace_contents(self, contents):
