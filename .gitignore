@@ -107,3 +107,6 @@ venv.bak/
 
 #OSX
 .DS_Store
+
+#Dataset
+dataset/

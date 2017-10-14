@@ -16,17 +16,16 @@ class EmailProcessor(object):
         Initialize EmailProcessor object with array or words.
         :param word_arr: array of available words
         """
-        super.__init__()
+        object.__init__(self)
         self.word_arr = word_arr
 
 
     def process_email(self, contents):
-        contents = "test_contents"#Test
         contents = self.replace_contents(contents)
-
+        #print(contents)
         # Get all the words by ommiting all punctuaction
-        pattern_str = ' @$/#.-:&*+=[]?!(){},''">_<;%' + chr(10) + chr(13)
-        words = re.split(pattern_str, contents)
+        #pattern_str = '[ @\$/#.-:&\*\+=\[]\?!\(\){},\'\'">_<;%' + chr(10) + chr(13) + "]+"
+        words = re.split("[\W_]+", contents)
         word_indexes = []
 
         for word in words:
@@ -60,7 +59,6 @@ class EmailProcessor(object):
 
 
     def replace_contents(self, contents):
-        contents = "test_contents"#Test
         has_header = True
 
         # If this is raw email, find email header and remove ( \n\n )

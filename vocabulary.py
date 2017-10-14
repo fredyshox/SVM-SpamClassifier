@@ -12,10 +12,10 @@ def getVocabList():
         vocab_list = []
         for line in file:
             line = line.lower()
-            line = line.replace(' ', '')
+            line = line.replace('\n', '')
             if not len(line)==0:
                 vocab_list.append(line)
-        print(len(vocab_list))
+        print("Length of vocab: " + str(len(vocab_list)))
         return vocab_list
 
     return None
