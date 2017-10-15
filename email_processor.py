@@ -19,7 +19,6 @@ class EmailProcessor(object):
         object.__init__(self)
         self.word_arr = word_arr
 
-
     def process_email(self, contents):
         contents = self.replace_contents(contents)
         #print(contents)
@@ -56,7 +55,6 @@ class EmailProcessor(object):
         for i in indexes:
             feature_vec[i] = 1
         return feature_vec
-
 
     def replace_contents(self, contents):
         has_header = True
