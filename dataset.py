@@ -1,7 +1,7 @@
 import os
 from email_processor import EmailProcessor
 from vocabulary import  getVocabList
-import random
+import utility
 import numpy as np
 
 # Dataset division:
@@ -9,11 +9,10 @@ import numpy as np
 # 20% cross validation set
 # 20% test set
 
+
 class DatasetExtractor(object):
 
-    ignored = [".DS_Store"]
-
-    def __init__(self, class0_paths, class1_paths, X = None, y = None):
+    def __init__(self, class0_paths, class1_paths, X=None, y=None):
         object.__init__(self)
         self.cp = os.path.dirname(os.path.realpath(__file__)) + "/dataset/"
         self.vocab = getVocabList()
@@ -22,12 +21,12 @@ class DatasetExtractor(object):
         self.class1_paths = class1_paths
 
         self.dataset_length = 0
-        self.Xval = []
-        self.yval = []
-        self.Xtest = []
-        self.ytest  = []
+        self.Xval = np.array([])
+        self.yval = np.array([])
+        self.Xtest = np.array([])
+        self.ytest = np.array([])
 
-        if X==None or y==None:
+        if X is None or y is None:
             self.extract_dataset()
         else:
             self.X = X
@@ -35,77 +34,71 @@ class DatasetExtractor(object):
             self.dataset_length = len(X)
 
     def extract_dataset(self):
-        X = []
-        y = []
+        Xtemp = []
+        ytemp = []
         for path in self.class0_paths:
-            files = self.list_files(self.cp + path)
+            files = utility.list_files(self.cp + path)
             temp = self.extract_features(files)
-            X.extend(temp)
-            y = y + [0] * len(temp)
+            Xtemp.extend(temp)
+            ytemp = ytemp + [0] * len(temp)
 
         for path in self.class1_paths:
-            files = self.list_files(self.cp + path)
+            files = utility.list_files(self.cp + path)
             temp = self.extract_features(files)
-            X.extend(temp)
-            y = y + [1] * len(temp)
+            Xtemp.extend(temp)
+            ytemp = ytemp + [1] * len(temp)
 
         # randomize order
-        random_ind = self.random_indices(1, len(X))
-        self.X = []
-        self.y = []
+        random_ind = utility.random_indices(1, len(Xtemp))
+        self.X = np.array([], dtype="uint8")
+        self.X.resize(len(Xtemp),len(self.vocab))
+        self.y = np.array([], dtype="uint8")
+        self.y.resize(len(ytemp))
+        # TO BE REMOVED
+        print("Xlen:" + str(len(self.X)))
+        print("ylen:" + str(len(self.y)))
         for i in range(len(random_ind)):
-            self.X.append(X[random_ind[i]])
-            self.y.append(y[random_ind[i]])
+            self.X[i] = np.array(Xtemp[random_ind[i]], dtype="uint8")
+            self.y[i] = np.array(ytemp[random_ind[i]], dtype="uint8")
 
         self.dataset_length = len(self.X)
         return (self.X, self.y)
 
     def create_cv_set(self, percent):
-        if percent>1 or percent<0:
+        if percent > 1 or percent < 0:
             return
         end = int(percent*self.dataset_length)
-        self.Xval = self.X[0:end]
-        del self.X[0:end]
-        self.Val = self.y[0:end]
-        del self.y[0:end]
+        self.Xval = np.array(self.X[0:end])
+        self.X = np.delete(self.X, range(end), axis=0)
+        self.yval = np.array(self.y[0:end])
+        self.y = np.delete(self.y, range(end), axis=0)
         return
 
     def create_test_set(self, percent):
-        if percent>1 or percent<0:
+        if percent > 1 or percent < 0:
             return
         end = int(percent*self.dataset_length)
-        self.Xtest = self.X[0:end]
-        del self.X[0:end]
-        self.ytest = self.y[0:end]
-        del self.y[0:end]
+        self.Xtest = np.array(self.X[0:end])
+        self.X = np.delete(self.X, range(end), axis=0)
+        self.ytest = np.array(self.y[0:end])
+        self.y = np.delete(self.y, range(end), axis=0)
         return
 
-
     def save_dataset(self, path=None):
-        if self.X == None or self.y == None:
+        if self.X is None or self.y is None:
             return
         else:
-            if path==None:
-                fp = self.cp + "/spamDataset.npz"
+            if path is None:
+                fp = self.cp + "/spam_dataset.npz"
             else:
                 fp = self.cp + path
 
-            npX = np.array(self.X)
-            npy = np.array(self.y)
-            npXval = np.array(self.Xval)
-            npyval = np.array(self.yval)
-            npXtest = np.array(self.Xtest)
-            npytest = np.array(self.ytest)
-            np.savez(fp, X=npX, y=npy, X_val=npXval, y_val=npyval, X_test=npXtest, y_test=npytest)
+            np.savez_compressed(fp, X=self.X, y=self.y, X_val=self.Xval, y_val=self.yval, X_test=self.Xtest, y_test=self.ytest)
             return
 
     def extract_features(self, paths):
         X_vec = []
         for path in paths:
-            path_comp = path.split("/")
-            if path_comp[len(path_comp)-1] in self.ignored:
-                del path_comp
-                continue
             print(path)
             f = open(path, "r", errors="replace")
             content = f.read()
@@ -113,35 +106,7 @@ class DatasetExtractor(object):
             features = self.processor.email_features(indexes)
             X_vec.append(features)
             del content, f
-        return (X_vec)
-
-    def elements_with_indices(self, arr, indices):
-        result = []
-        count = len(arr)
-        for ix in indices:
-            if ix >= count:
-                continue
-            else:
-                result.append(arr[ix])
-        return result
-
-    def random_indices(self, percent, length):
-        count = int(percent * length)
-        arr = list(range(length))
-        result = []
-        for i in range(count):
-            rand_id = random.choice(arr)
-            result.append(rand_id)
-            arr.remove(rand_id)
-        return result
-
-    def list_files(self, dir):
-        file_list = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
-        path_list = []
-        for file in file_list:
-            path = dir + "/" + file
-            path_list.append(path)
-        return path_list
+        return np.array(X_vec, dtype="uint8")
 
 if __name__ == "__main__":
     dsExtractor = DatasetExtractor(["non-spam-easy", "non-spam-hard"], ["spam"])
