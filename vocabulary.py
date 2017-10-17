@@ -1,3 +1,11 @@
+#! /usr/bin/env python
+#
+# vocabulary.py
+#
+# Created by Kacper Rączy on 10.10.2017.
+# Copyright (c) 2017 Kacper Rączy. All rights reserved.
+#
+
 import os
 
 def getVocabList():
@@ -13,7 +21,7 @@ def getVocabList():
             for line in file:
                 line = line.lower()
                 line = line.replace('\n', '')
-                if not len(line)==0:
+                if not len(line) == 0:
                     vocab_list.append(line)
             print("Length of vocab: " + str(len(vocab_list)))
             return vocab_list

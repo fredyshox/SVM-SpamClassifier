@@ -1,7 +1,15 @@
+#! /usr/bin/env python
+#
+# dataset.py
+#
+# Created by Kacper Rączy on 11.10.2017.
+# Copyright (c) 2017 Kacper Rączy. All rights reserved.
+#
+
 import os
-from email_processor import EmailProcessor
-from vocabulary import  getVocabList
-import utility
+from src.email_processor import EmailProcessor
+from vocabulary import getVocabList
+import src.utility as utility
 import numpy as np
 
 # Dataset division:
@@ -14,7 +22,8 @@ class DatasetExtractor(object):
 
     def __init__(self, class0_paths, class1_paths, X=None, y=None):
         object.__init__(self)
-        self.cp = os.path.dirname(os.path.realpath(__file__)) + "/dataset/"
+        current = os.path.dirname(os.path.realpath(__file__)).split("/")
+        self.cp = "/".join(current[0:len(current)-2]) + "/dataset"
         self.vocab = getVocabList()
         self.processor = EmailProcessor(self.vocab)
         self.class0_paths = class0_paths
@@ -37,13 +46,13 @@ class DatasetExtractor(object):
         Xtemp = []
         ytemp = []
         for path in self.class0_paths:
-            files = utility.list_files(self.cp + path)
+            files = utility.list_files(self.cp + "/" +path)
             temp = self.extract_features(files)
             Xtemp.extend(temp)
             ytemp = ytemp + [0] * len(temp)
 
         for path in self.class1_paths:
-            files = utility.list_files(self.cp + path)
+            files = utility.list_files(self.cp + "/" + path)
             temp = self.extract_features(files)
             Xtemp.extend(temp)
             ytemp = ytemp + [1] * len(temp)
