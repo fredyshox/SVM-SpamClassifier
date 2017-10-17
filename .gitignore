@@ -111,4 +111,4 @@ venv.bak/
 
 #Dataset
 dataset/*
-!dataset/spamDataset.npz
+!dataset/spam_dataset.npz
