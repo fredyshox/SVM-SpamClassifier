@@ -8,14 +8,13 @@ def getVocabList():
     project_path = os.path.dirname(os.path.realpath(__file__))
     fp = project_path + '/vocabulary.txt'
     if os.path.exists(fp):
-        file = open(fp, 'r')
-        vocab_list = []
-        for line in file:
-            line = line.lower()
-            line = line.replace('\n', '')
-            if not len(line)==0:
-                vocab_list.append(line)
-        print("Length of vocab: " + str(len(vocab_list)))
-        return vocab_list
-
+        with open(fp, 'r') as file:
+            vocab_list = []
+            for line in file:
+                line = line.lower()
+                line = line.replace('\n', '')
+                if not len(line)==0:
+                    vocab_list.append(line)
+            print("Length of vocab: " + str(len(vocab_list)))
+            return vocab_list
     return None

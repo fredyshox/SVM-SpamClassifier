@@ -11,23 +11,24 @@ import re
 from stemming.porter2 import stem
 import os
 
+
 def getWordnetVocab(path):
     """
     Extracts words from wordnet core file, then stem it.
     :param path: path to wordnet core file
     :return: list of stemmed extracted words
     """
-    f = open(path, "r")
     vocab_list = []
-    for line in f:
-        temp = re.search('\[[\w]+\]', line)
-        if not temp == None:
-            str = re.sub('[\[\]]', '', temp.group())
-            str = stem(str)
-            if not str in vocab_list:
-                vocab_list.append(str)
-    f.close()
+    with open(path, "r") as f:
+        for line in f:
+            temp = re.search('\[[\w]+\]', line)
+            if not temp is None:
+                str = re.sub('[\[\]]', '', temp.group())
+                str = stem(str)
+                if str not in vocab_list:
+                    vocab_list.append(str)
     return vocab_list
+
 
 def addSpamWords(path, vocab_list):
     """
@@ -36,15 +37,14 @@ def addSpamWords(path, vocab_list):
     :param vocab_list: current vocabulary list
     :return: extended vocabulary list
     """
-    f = open(path, "r")
-    for line in f:
-        line = line.replace("\n", "")
-        if len(line)>0:
-            line = stem(line)
-            if not line in vocab_list:
-                vocab_list.append(line)
-    vocab_list.sort(key=str.lower)
-    f.close()
+    with open(path, "r") as f:
+        for line in f:
+            line = line.replace("\n", "")
+            if len(line) > 0:
+                line = stem(line)
+                if line not in vocab_list:
+                    vocab_list.append(line)
+        vocab_list.sort(key=str.lower)
     return vocab_list
 
 def main():
@@ -64,9 +64,8 @@ def main():
 
     path_comp = currentPath.split("/")
     outputPath = "/".join(path_comp[0:len(path_comp)-1]) + "/vocabulary.txt"
-    output = open(outputPath, "w")
-    output.write(converted)
-    output.close()
+    with open(outputPath, "w") as output:
+        output.write(converted)
 
 if __name__=="__main__":
     main()

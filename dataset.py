@@ -54,9 +54,7 @@ class DatasetExtractor(object):
         self.X.resize(len(Xtemp),len(self.vocab))
         self.y = np.array([], dtype="uint8")
         self.y.resize(len(ytemp))
-        # TO BE REMOVED
-        print("Xlen:" + str(len(self.X)))
-        print("ylen:" + str(len(self.y)))
+
         for i in range(len(random_ind)):
             self.X[i] = np.array(Xtemp[random_ind[i]], dtype="uint8")
             self.y[i] = np.array(ytemp[random_ind[i]], dtype="uint8")
@@ -100,12 +98,12 @@ class DatasetExtractor(object):
         X_vec = []
         for path in paths:
             print(path)
-            f = open(path, "r", errors="replace")
-            content = f.read()
-            indexes = self.processor.process_email(content)
-            features = self.processor.email_features(indexes)
-            X_vec.append(features)
-            del content, f
+            with open(path, "r", errors="replace") as f:
+                content = f.read()
+                indexes = self.processor.process_email(content)
+                features = self.processor.email_features(indexes)
+                X_vec.append(features)
+                del content
         return np.array(X_vec, dtype="uint8")
 
 if __name__ == "__main__":
