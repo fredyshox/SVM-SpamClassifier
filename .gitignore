@@ -112,3 +112,4 @@ venv.bak/
 #Dataset
 dataset/*
 !dataset/spam_dataset.npz
+!dataset/clf_model
