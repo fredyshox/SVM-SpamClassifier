@@ -8,7 +8,7 @@
 
 import os
 from spam_clf.email_processor import EmailProcessor
-from vocabulary import getVocabList
+from spam_clf.vocabulary import getVocabList
 import spam_clf.utility as utility
 import numpy as np
 

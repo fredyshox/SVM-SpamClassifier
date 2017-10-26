@@ -63,7 +63,7 @@ def main():
 
 
     path_comp = currentPath.split("/")
-    outputPath = "/".join(path_comp[0:len(path_comp)-1]) + "/vocabulary.txt"
+    outputPath = "/".join(path_comp[0:len(path_comp)-1]) + "/dataset/vocabulary.txt"
     with open(outputPath, "w") as output:
         output.write(converted)
 

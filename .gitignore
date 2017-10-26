@@ -113,6 +113,7 @@ venv.bak/
 dataset/*
 !dataset/spam_dataset.npz
 !dataset/clf_model
+!dataset/vocabulary.txt
 
 #Wordnet
 vocab_extraction/core-wordnet.txt

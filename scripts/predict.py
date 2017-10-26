@@ -1,3 +1,13 @@
+#! /usr/bin/env python
+#
+# predict.py
+#
+# Created by Kacper Rączy on 26.10.2017.
+# Copyright (c) 2017 Kacper Rączy. All rights reserved.
+#
+# Simple script for checking spam prediction to given email.
+#
+
 from spam_clf.classifier import spam_predict, MODEL_PATH
 import pickle
 import sys

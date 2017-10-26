@@ -1,15 +1,23 @@
+#! /usr/bin/env python
+#
+# classifier.py
+#
+# Created by Kacper Rączy on 25.10.2017.
+# Copyright (c) 2017 Kacper Rączy. All rights reserved.
+#
+
 from sklearn import svm
 import numpy as np
 import pickle
 from spam_clf.email_processor import EmailProcessor
 from spam_clf.dataset import import_dataset
-from vocabulary import getVocabList
+from spam_clf.vocabulary import getVocabList
 import os
 
 MODEL_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/dataset/clf_model"
 
 
-#tbc
+#tbc kernel function for future use
 def gaussian_kernel(x1, x2, sigma):
     sim = 0
     arr = (x1 - x2)
