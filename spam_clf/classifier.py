@@ -6,11 +6,11 @@ from spam_clf.dataset import import_dataset
 from vocabulary import getVocabList
 import os
 
-MODEL_PATH = os.getcwd() + "/dataset/clf_model"
+MODEL_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/dataset/clf_model"
 
 
 #tbc
-def gaussianKernel(x1, x2, sigma):
+def gaussian_kernel(x1, x2, sigma):
     sim = 0
     arr = (x1 - x2)
     sim = sim + np.sum(np.power(arr, 2))
@@ -58,7 +58,7 @@ def test_model(classifier):
     return predict_accuracy
 
 
-def predict(classifier, path, has_header=False):
+def spam_predict(classifier, path, has_header=False):
     if not os.path.exists(path):
         path = os.getcwd() + path
     words = getVocabList()
@@ -69,3 +69,4 @@ def predict(classifier, path, has_header=False):
         vector = processor.email_features(e_indices)
         prediction = classifier.predict(np.array([vector]))
         print(path + " prediction: " + str(prediction))
+    return prediction
