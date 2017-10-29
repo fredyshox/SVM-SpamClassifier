@@ -1,11 +1,6 @@
-# SVMSpamClassifier
+# SVM-SpamClassifier
 
-Spam classifier written in python 3 using Support Vector Machine.
-
-TBC
-
-## How does it work?
-TBC
+Spam classifier written in python 3 using Support Vector Machine algorithm.
 
 ## Data set
 
@@ -25,8 +20,4 @@ List of used libraries etc. :
 * scikit-learn 0.19.0
 * numpy 1.13.3
 * stemming 1.0.1
-* scipy 0.19.1 (required by numpy)
-
-## How good is it?
-
-TBC
+* scipy 0.19.1 
