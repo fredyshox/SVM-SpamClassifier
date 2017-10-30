@@ -117,7 +117,7 @@ class DatasetExtractor(object):
 
 
 def import_dataset(path="/dataset/spam_dataset.npz"):
-    ds_path = os.getcwd() + path
+    ds_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + path
     if os.path.exists(ds_path):
         loaded = np.load(ds_path)
         return loaded
